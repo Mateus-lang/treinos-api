@@ -3,7 +3,7 @@ import "dotenv/config"
 
 import fastifyCors from "@fastify/cors";
 import { fastifySwagger } from '@fastify/swagger';
-import { fastifySwaggerUi } from '@fastify/swagger-ui';
+import fastifyApiReference from "@scalar/fastify-api-reference";
 import Fastify from 'fastify'
 import {
     jsonSchemaTransform,
@@ -37,13 +37,40 @@ await app.register(fastifySwagger, {
     transform: jsonSchemaTransform,
 });
 
-await app.register(fastifySwaggerUi, {
-    routePrefix: "/docs",
-})
+
 
 await app.register(fastifyCors, {
     origin: ["http://localhost:3000"],
     credentials: true
+})
+
+await app.register(fastifyApiReference, {
+    routePrefix: "/docs",
+    configuration: {
+        sources: [
+            {
+                title: "Treino App API",
+                slug: "treino-app-api",
+                url: "/swagger.json",
+            },
+            {
+                title: "Auth API",
+                slug: "auth-api",
+                url: "/api/auth/open-api/generate-schema"
+            }
+        ]
+    }
+})
+
+app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/swagger.json",
+    schema: {
+        hide: true
+    },
+    handler: async () => {
+        return app.swagger()
+    }
 })
 
 app.withTypeProvider<ZodTypeProvider>().route({
