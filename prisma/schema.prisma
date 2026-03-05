@@ -57,6 +57,7 @@ model WorkoutDay {
   workoutPlanId              String
   workoutPlan                WorkoutPlan       @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
   isRest                     Boolean           @default(false)
+  coverImageUrl              String?
   weekDay                    WeekDay
   exercises                  WorkoutExercise[]
   estimatedDurationInSeconds Int
