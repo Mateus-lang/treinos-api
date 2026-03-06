@@ -47,3 +47,7 @@ Swagger UI disponível em `/docs` quando o servidor está rodando (porta 4949).
 
 - **SEMPRE** use Context7 para buscar documentações
 - **SEMPRE** use Serena para semantic code retrieval e editing tools.
+
+## Regras Gerais
+
+- **IMPORTANTE** Leia os arquivos .md que estão dentro da pasta @docs
