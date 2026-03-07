@@ -170,6 +170,30 @@ export const GetWorkoutDayResponseSchema = z.object({
   ),
 });
 
+export const UpsertUserTrainDataBodySchema = z.object({
+  weightInGrams: z.number().int().min(0),
+  heightInCentimeters: z.number().int().min(0),
+  age: z.number().int().min(0),
+  bodyFatPercentage: z.number().int().min(0).max(100),
+});
+
+export const UpsertUserTrainDataResponseSchema = z.object({
+  userId: z.string(),
+  weightInGrams: z.number(),
+  heightInCentimeters: z.number(),
+  age: z.number(),
+  bodyFatPercentage: z.number().max(100),
+});
+
+export const GetUserTrainDataResponseSchema = z.object({
+  userId: z.string(),
+  userName: z.string(),
+  weightInGrams: z.number(),
+  heightInCentimeters: z.number(),
+  age: z.number(),
+  bodyFatPercentage: z.number().max(100),
+});
+
 export const WorkoutPlanSchema = z.object({
   id: z.uuid(),
   name: z.string().trim().min(1),
