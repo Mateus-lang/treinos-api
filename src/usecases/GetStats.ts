@@ -154,12 +154,6 @@ export class GetStats {
     for (let i = 0; i < 365; i++) {
       const dayOfWeek = WEEKDAY_MAP[checkDate.day()];
 
-      if (!planWeekDays.has(dayOfWeek)) {
-        checkDate = checkDate.subtract(1, "day");
-        continue;
-      }
-      
-
       const dayStart = checkDate.startOf("day");
       const dayEnd = checkDate.endOf("day");
 
@@ -177,11 +171,12 @@ export class GetStats {
           },
         });
 
-      if (!completedSession) {
+      if (completedSession) {
+        streak++;
+      } else if (planWeekDays.has(dayOfWeek)) {
         break;
       }
 
-      streak++;
       checkDate = checkDate.subtract(1, "day");
     }
 
