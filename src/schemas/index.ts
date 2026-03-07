@@ -58,6 +58,25 @@ export const GetHomeResponseSchema = z.object({
   ),
 });
 
+export const GetStatsQuerySchema = z.object({
+  from: z.iso.date(),
+  to: z.iso.date(),
+});
+
+export const GetStatsResponseSchema = z.object({
+  workoutStreak: z.number(),
+  consistencyByDay: z.record(
+    z.iso.date(),
+    z.object({
+      workoutDayCompleted: z.boolean(),
+      workoutDayStarted: z.boolean(),
+    }),
+  ),
+  completedWorkoutsCount: z.number(),
+  conclusionRate: z.number(),
+  totalTimeInSeconds: z.number(),
+});
+
 export const GetWorkoutPlanParamsSchema = z.object({
   workoutPlanId: z.uuid(),
 });
@@ -106,8 +125,8 @@ export const GetWorkoutDayResponseSchema = z.object({
     z.object({
       id: z.string(),
       workoutDayId: z.string(),
-      startedAt: z.string().optional(),
-      completedAt: z.string().optional(),
+      startedAt: z.iso.date().optional(),
+      completedAt: z.iso.date().optional(),
     }),
   ),
 });
