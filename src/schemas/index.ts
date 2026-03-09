@@ -36,18 +36,21 @@ export const GetHomeParamsSchema = z.object({
   date: z.iso.date(),
 });
 
+const WorkoutDaySchema = z.object({
+  workoutPlanId: z.string(),
+  id: z.string(),
+  name: z.string(),
+  isRest: z.boolean(),
+  weekDay: z.enum(WeekDay),
+  estimatedDurationInSeconds: z.number(),
+  coverImageUrl: z.string().optional(),
+  exercisesCount: z.number(),
+});
+
 export const GetHomeResponseSchema = z.object({
   activeWorkoutPlanId: z.string(),
-  todayWorkoutDay: z.object({
-    workoutPlanId: z.string(),
-    id: z.string(),
-    name: z.string(),
-    isRest: z.boolean(),
-    weekDay: z.enum(WeekDay),
-    estimatedDurationInSeconds: z.number(),
-    coverImageUrl: z.string().optional(),
-    exercisesCount: z.number(),
-  }).optional(),
+  todayWorkoutDay: WorkoutDaySchema.optional(),
+  suggestedWorkoutDay: WorkoutDaySchema.optional(),
   workoutStreak: z.number(),
   consistencyByDay: z.record(
     z.string(),
