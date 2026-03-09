@@ -16,6 +16,7 @@ export const homeRoutes = async (app: FastifyInstance) => {
     method: "GET",
     url: "/:date",
     schema: {
+      operationId: "getHomeData",
       tags: ["Home"],
       summary: "Obter dados da página inicial",
       params: GetHomeParamsSchema,
