@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 
-import { NotFoundError } from "../errors/index.js";
 import { WeekDay } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/db.js";
 
@@ -34,7 +33,7 @@ interface WorkoutDayDto {
 }
 
 interface OutputDto {
-  activeWorkoutPlanId: string;
+  activeWorkoutPlanId?: string;
   todayWorkoutDay?: WorkoutDayDto;
   suggestedWorkoutDay?: WorkoutDayDto;
   workoutStreak: number;
@@ -67,13 +66,7 @@ export class GetHome {
       },
     });
 
-    if (!workoutPlan) {
-      throw new NotFoundError(
-        "Active workout plan not found",
-      );
-    }
-
-    const todayWorkoutDay = workoutPlan.workoutDays.find(
+    const todayWorkoutDay = workoutPlan?.workoutDays.find(
       (day) => day.weekDay === currentWeekDay,
     );
 
@@ -122,14 +115,16 @@ export class GetHome {
     }
 
     // Calculate workout streak
-    const workoutStreak = await this.calculateStreak(
-      dto.userId,
-      currentDate,
-      workoutPlan.workoutDays,
-    );
+    const workoutStreak = workoutPlan
+      ? await this.calculateStreak(
+          dto.userId,
+          currentDate,
+          workoutPlan.workoutDays,
+        )
+      : 0;
 
     const todayWorkoutDayDto: WorkoutDayDto | undefined =
-      todayWorkoutDay
+      todayWorkoutDay && workoutPlan
         ? {
             workoutPlanId: workoutPlan.id,
             id: todayWorkoutDay.id,
@@ -147,7 +142,10 @@ export class GetHome {
 
     let suggestedWorkoutDay: WorkoutDayDto | undefined;
 
-    if (!todayWorkoutDay || todayWorkoutDay.isRest) {
+    if (
+      workoutPlan &&
+      (!todayWorkoutDay || todayWorkoutDay.isRest)
+    ) {
       suggestedWorkoutDay = this.findNextTrainingDay(
         workoutPlan.id,
         currentDate,
@@ -156,7 +154,7 @@ export class GetHome {
     }
 
     return {
-      activeWorkoutPlanId: workoutPlan.id,
+      activeWorkoutPlanId: workoutPlan?.id,
       todayWorkoutDay: todayWorkoutDayDto,
       suggestedWorkoutDay,
       workoutStreak,
