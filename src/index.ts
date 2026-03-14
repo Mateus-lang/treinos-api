@@ -20,7 +20,6 @@ import { meRoutes } from "./routes/me.js";
 import { statsRoutes } from "./routes/stats.js";
 import { workoutPlanRoutes } from "./routes/workout-plan.js";
 
-
 const envToLogger = {
   development: {
     transport: {
@@ -180,6 +179,7 @@ app.route({
 
 try {
   await app.listen({
+    host: "0.0.0.0",
     port: Number(env.PORT),
   });
 } catch (err) {
