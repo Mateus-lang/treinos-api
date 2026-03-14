@@ -4,7 +4,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
   PORT: z.string().default("8080"),
-  DATABASE_URL: z.string().startsWith("postgres://"),
+  DATABASE_URL: z.string().startsWith("postgresql://"),
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.url(),
   API_BASE_URL: z.url().default("http://localhost:8080"),
