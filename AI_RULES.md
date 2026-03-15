@@ -5,7 +5,7 @@ API de treinos construida com Fastify 5, TypeScript, Prisma 7 e Better-Auth. Rod
 ## Comandos
 
 ```bash
-# Iniciar servidor de desenvolvimento (hot-reload na porta 8081)
+# Iniciar servidor de desenvolvimento (hot-reload na porta 8080)
 pnpm dev
 
 # Iniciar PostgreSQL

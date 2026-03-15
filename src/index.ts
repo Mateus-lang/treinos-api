@@ -135,10 +135,16 @@ app.route({
   },
   async handler(request, reply) {
     try {
-      // Construct request URL
+      // Construct request URL respecting X-Forwarded-Proto from proxy
+      const protocol =
+        request.headers["x-forwarded-proto"] ??
+        (env.NODE_ENV === "production" ? "https" : "http");
+      const host =
+        request.headers["x-forwarded-host"] ??
+        request.headers.host;
       const url = new URL(
         request.url,
-        `http://${request.headers.host}`,
+        `${protocol}://${host}`,
       );
 
       // Convert Fastify headers to standard Headers object
